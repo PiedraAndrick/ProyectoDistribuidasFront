@@ -1,0 +1,108 @@
+<mat-card>
+    <mat-card-content>
+        <mat-card class="card_title text-center">
+            <mat-card-content>
+                <h2>Institución</h2>
+            </mat-card-content>
+        </mat-card>
+
+        <div class="row mt-2">
+            <div class="col-12 text-end px-4 mb-3">
+                <hr class="hr-text" data-content="Formulario">
+
+                <form [formGroup]="formulario" class="py-2">
+                    <div class="row">
+                        <div class="col-12 col-md-6 col-lg-3 mb-3 text-start">
+                            <div class="mb-1">
+                                <label for="nombre" class="form-label fw-bold">Nombre</label>
+                                <input type="text" class="form-control form-control-sm" id="nombre" placeholder="Nombre" formControlName="nombre">
+                            </div>
+
+                            <div *ngIf="formulario.controls['nombre'].invalid && formulario.controls['nombre'].touched" class="invalid-feedback">
+                                <div *ngIf="formulario.controls['nombre'].errors?.['required']">El nombre es requerido.</div>
+                                <div *ngIf="formulario.controls['nombre'].errors?.['minlength']">El nombre debe ser mayor de 3 caracteres.</div>
+                                <div *ngIf="formulario.controls['nombre'].errors?.['maxlength']">El nombre debe ser menor de 50 caracteres.</div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-md-6 col-lg-3 mb-3 text-start">
+                            <label for="direccion" class="form-label fw-bold">Dirección</label>
+                            <input type="text" class="form-control form-control-sm" id="direccion" placeholder="Dirección" formControlName="direccion">
+
+                            <div *ngIf="formulario.controls['direccion'].invalid && formulario.controls['direccion'].touched" class="invalid-feedback">
+                                <div *ngIf="formulario.controls['direccion'].errors?.['required']">La dirección es requerida.</div>
+                                <div *ngIf="formulario.controls['direccion'].errors?.['minlength']">La dirección debe ser mayor de 3 caracteres.</div>
+                                <div *ngIf="formulario.controls['direccion'].errors?.['maxlength']">La dirección debe ser menor de 250 caracteres.</div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-md-6 col-lg-3 mb-3 text-start">
+                            <label for="telefono" class="form-label fw-bold">Teléfono</label>
+                            <input type="text" class="form-control form-control-sm" id="telefono" placeholder="Teléfono" formControlName="telefono">
+
+                            <div *ngIf="formulario.controls['telefono'].invalid && formulario.controls['telefono'].touched" class="invalid-feedback">
+                                <div *ngIf="formulario.controls['telefono'].errors?.['required']">El teléfono es requerido.</div>
+                                <div *ngIf="formulario.controls['telefono'].errors?.['minlength'] || formulario.controls['telefono'].errors?.['maxlength']">El teléfono debe tener 10 dígitos.</div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-md-6 col-lg-3 mb-3 text-start">
+                            <label for="email" class="form-label fw-bold">Email</label>
+                            <input type="text" class="form-control form-control-sm" id="email" placeholder="Email" formControlName="email">
+
+                            <div *ngIf="formulario.controls['email'].invalid && formulario.controls['email'].touched" class="invalid-feedback">
+                                <div *ngIf="formulario.controls['email'].errors?.['required']">El email es requerido.</div>
+                                <div *ngIf="formulario.controls['email'].errors?.['email']">El email debe ser válido.</div>
+                            </div>
+                        </div>
+
+
+                        <div class="col-12 text-center mt-3">
+                            <button *ngIf="!idInstitucion" mat-raised-button class="mx-2" (click)="resetearInstitucion()">Resetear</button>
+                            <button *ngIf="!idInstitucion" mat-raised-button color="primary" class="mx-2" [disabled]="formulario.invalid"  (click)="crearInstitucion()">Guardar</button>
+                            <button *ngIf="idInstitucion" mat-raised-button class="mx-2" (click)="cancelarEdit()">Cancelar</button>
+                            <button *ngIf="idInstitucion" mat-raised-button color="primary" class="mx-2" [disabled]="formulario.invalid" (click)="editarInstitucion()">Editar</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="col-12 px-4 py-2">
+                <hr class="hr-text" data-content="Lista">
+                
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead class="table-light">
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Nombre</th>
+                                <th scope="col">Dirección</th>
+                                <th scope="col">Teléfono</th>
+                                <th scope="col">Email</th>
+                                <th scope="col" style="min-width: 180px;">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let insti of listaInstitucion; let i = index">
+                                <th scope="row">#{{i + 1}}</th>
+                                <td>{{insti.nombre}}</td>
+                                <td>{{insti.direccion}}</td>
+                                <td>{{insti.telefono}}</td>
+                                <td>{{insti.email}}</td>
+                                <td>
+                                    <button type="button"  (click)="obtEditar(insti.idInstitucion)" class="btn btn-outline-warning me-2" #tooltip="matTooltip" matTooltip="Editar" matTooltipPosition="above">
+                                        <i class="fa-solid fa-pen-to-square"></i>
+                                    </button>
+    
+                                    <button type="button" (click)="eliminarInstitucion(insti.idInstitucion)" class="btn btn-outline-danger" #tooltip="matTooltip" matTooltip="Eliminar" matTooltipPosition="above">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </mat-card-content>
+</mat-card>
