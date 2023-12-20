@@ -1,0 +1,104 @@
+<mat-card>
+    <mat-card-content>
+        <mat-card class="card_title text-center">
+            <mat-card-content>
+                <h2>Resultados</h2>
+            </mat-card-content>
+        </mat-card>
+
+        <div class="row mt-2">
+            <div class="col-12 text-end px-4 mb-3">
+                <hr class="hr-text" data-content="Formulario">
+
+                <form [formGroup]="formulario" class="py-2">
+                    <div class="row">
+                        <div class="col-12 col-md-6 col-lg-4 mb-3 text-start">
+                            <div class="mb-1">
+                                <label for="descripcion" class="form-label fw-bold">Descripción</label>
+                                <textarea class="form-control form-control-sm" id="descripcion" rows="1" placeholder="Descripción" formControlName="descripcion"></textarea>
+                            </div>
+
+                            <div *ngIf="formulario.controls['descripcion'].invalid && formulario.controls['descripcion'].touched" class="invalid-feedback">
+                                <div *ngIf="formulario.controls['descripcion'].errors?.['required']">La descripción es requerida.</div>
+                                <div *ngIf="formulario.controls['descripcion'].errors?.['minlength']">La descripción debe ser mayor de 3 caracteres.</div>
+                                <div *ngIf="formulario.controls['descripcion'].errors?.['maxlength']">La descripción debe ser menor de 250 caracteres.</div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-md-6 col-lg-4 mb-3 text-start">
+                            <label for="estado" class="form-label fw-bold">Estado</label>
+                            <select class="form-select form-select-sm" aria-label="Default select example" id="estado" formControlName="estado">
+                                <option selected> --- Seleccionar --- </option>
+                                <option value="En proceso">En proceso</option>
+                                <option value="Terminada">Terminada</option>
+                            </select>
+
+                            <div *ngIf="formulario.controls['estado'].invalid && formulario.controls['estado'].touched" class="invalid-feedback">
+                                <div *ngIf="formulario.controls['estado'].errors?.['required']">El estado es requerido.</div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-md-6 col-lg-4 mb-3 text-start">
+                            <label for="mision" class="form-label fw-bold">Misión</label>
+                            <select formControlName="idMision" class="form-select form-select-sm"  [(ngModel)]="selectedMision">
+                                <option value="-1" disabled selected>Seleccione una mision</option>
+                                <option *ngFor="let mision of listaMision" [value]="mision.idMision">{{mision.nombre}}</option>
+                            </select>
+
+                            <div *ngIf="formulario.controls['idMision'].invalid && formulario.controls['idMision'].touched" class="invalid-feedback">
+                                <div *ngIf="formulario.controls['idMision'].errors?.['required']">La misión es requerida.</div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 text-center mt-3">
+                            <button *ngIf="!idResultado" mat-raised-button class="mx-2"
+                                (click)="resetearResultados()">Resetear</button>
+                            <button *ngIf="!idResultado" mat-raised-button color="primary" class="mx-2"
+                                [disabled]="formulario.invalid" (click)="crearResultado()">Guardar</button>
+                            <button *ngIf="idResultado" mat-raised-button class="mx-2"
+                                (click)="cancelarEdit()">Cancelar</button>
+                            <button *ngIf="idResultado" mat-raised-button color="primary" class="mx-2"
+                                [disabled]="formulario.invalid" (click)="editarResultados()">Editar</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="col-12 px-4 py-2">
+                <hr class="hr-text" data-content="Lista">
+                
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead class="table-light">
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Descripción</th>
+                                <th scope="col">Estado</th>
+                                <th scope="col">Misión</th>
+                                <th scope="col" style="min-width: 180px;">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let resultados of listaResultado; let i = index">
+                                <th scope="row">#{{i + 1}}</th>
+                                <td>{{resultados.descripcion}}</td>
+                                <td>{{resultados.estado}}</td>
+                                <td>{{obtenerNombreMision(resultados.idMision)}}</td>
+                                <td>
+    
+                                    <button type="button" (click)="obtEditar(resultados.idResultados)" class="btn btn-outline-warning me-2" #tooltip="matTooltip" matTooltip="Editar" matTooltipPosition="above">
+                                        <i class="fa-solid fa-pen-to-square"></i>
+                                    </button>
+    
+                                    <button type="button" (click)="eliminarResultados(resultados.idResultados)" class="btn btn-outline-danger" #tooltip="matTooltip" matTooltip="Eliminar" matTooltipPosition="above">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </mat-card-content>
+</mat-card>
