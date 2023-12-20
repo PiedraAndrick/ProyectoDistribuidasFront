@@ -1,0 +1,173 @@
+<mat-card>
+    <mat-card-content>
+        <mat-card class="card_title text-center">
+            <mat-card-content>
+                <h2>Personal</h2>
+            </mat-card-content>
+        </mat-card>
+
+        <div class="row mt-2">
+            <div class="col-12 text-end px-4 mb-3">
+                <hr class="hr-text" data-content="Formulario">
+
+                <form [formGroup]="formulario" class="py-2">
+                    <div class="row">
+                        <div class="col-12 col-md-6 col-lg-4 mb-3 text-start">
+                            <div class="mb-1">
+                                <label for="nombre" class="form-label fw-bold">Nombres</label>
+                                <input type="text" class="form-control form-control-sm" id="nombre" placeholder="Nombre"
+                                    formControlName="nombre">
+                            </div>
+
+                            <div *ngIf="formulario.controls['nombre'].invalid && formulario.controls['nombre'].touched"
+                                class="invalid-feedback">
+                                <div *ngIf="formulario.controls['nombre'].errors?.['required']">El nombre es requerido.
+                                </div>
+                                <div *ngIf="formulario.controls['nombre'].errors?.['minlength']">El nombre debe ser
+                                    mayor de 3 caracteres.</div>
+                                <div *ngIf="formulario.controls['nombre'].errors?.['maxlength']">El nombre debe ser
+                                    menor de 50 caracteres.</div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-md-6 col-lg-4 mb-3 text-start">
+                            <label for="apellido" class="form-label fw-bold">Apellidos</label>
+                            <input type="text" class="form-control form-control-sm" id="apellido"
+                                placeholder="Apellidos" formControlName="apellido">
+
+                            <div *ngIf="formulario.controls['apellido'].invalid && formulario.controls['apellido'].touched"
+                                class="invalid-feedback">
+                                <div *ngIf="formulario.controls['apellido'].errors?.['required']">El apellido es
+                                    requerido.</div>
+                                <div *ngIf="formulario.controls['apellido'].errors?.['minlength']">El apellido debe ser
+                                    mayor de 3 caracteres.</div>
+                                <div *ngIf="formulario.controls['apellido'].errors?.['maxlength']">El apellido debe ser
+                                    menor de 50 caracteres.</div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-md-6 col-lg-4 mb-3 text-start">
+                            <label for="genero" class="form-label fw-bold">Genero</label>
+
+                            <div class="opciones_genero">
+                                <div class="form-check form-check-inline me-4">
+                                    <input class="form-check-input" type="radio" name="genero" id="masculino"
+                                        value="Masculino" formControlName="genero">
+                                    <label class="form-check-label" for="masculino">Masculino</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="genero" id="femenino"
+                                        value="Femenino" formControlName="genero">
+                                    <label class="form-check-label" for="femenino">Femenino</label>
+                                </div>
+                            </div>
+
+                            <div *ngIf="formulario.controls['genero'].invalid && formulario.controls['genero'].touched"
+                                class="invalid-feedback">
+                                <div *ngIf="formulario.controls['genero'].errors?.['required']">El genero es requerido.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-md-6 col-lg-4 mb-3 text-start">
+                            <label for="dateBirth" class="form-label fw-bold">Fecha de nacimiento</label>
+                            <input type="date" class="form-control form-control-sm" id="fechaNacimiento"
+                                placeholder="Fecha" formControlName="fechaNacimiento">
+
+                            <div *ngIf="formulario.controls['fechaNacimiento'].invalid && formulario.controls['fechaNacimiento'].touched"
+                                class="invalid-feedback">
+                                <div *ngIf="formulario.controls['fechaNacimiento'].errors?.['required']">La fecha de
+                                    nacimiento es requerida.</div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-md-6 col-lg-4 mb-3 text-start">
+                            <label for="edad" class="form-label fw-bold">Edad</label>
+                            <input type="text" class="form-control form-control-sm" id="edad" placeholder="Edad"
+                                formControlName="edad">
+
+                            <div *ngIf="formulario.controls['edad'].invalid && formulario.controls['edad'].touched"
+                                class="invalid-feedback">
+                                <div *ngIf="formulario.controls['edad'].errors?.['required']">La edad es requerida.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-md-6 col-lg-4 mb-3 text-start">
+                            <label for="institucion" class="form-label fw-bold">Institución</label>
+                            <select formControlName="idInstitucion" class="form-select form-select-sm"  [(ngModel)]="selectedInstitucion">
+                                <option value="-1" disabled selected>Seleccione una Institucion</option>
+                                <option *ngFor="let insti of listaInstitucion" [value]="insti.idInstitucion">{{insti.nombre}}</option>
+                            </select>
+
+                            <div *ngIf="formulario.controls['idInstitucion'].invalid && formulario.controls['idInstitucion'].touched"
+                                class="invalid-feedback">
+                                <div *ngIf="formulario.controls['idInstitucion'].errors?.['required']">La institución es
+                                    requerida.</div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 text-center mt-3">
+                            <button *ngIf="!idPersonal" mat-raised-button class="mx-2"
+                                (click)="resetearPersonal()">Resetear</button>
+                            <button *ngIf="!idPersonal" mat-raised-button color="primary" class="mx-2"
+                                [disabled]="formulario.invalid" (click)="crearPersonal()">Guardar</button>
+                            <button *ngIf="idPersonal" mat-raised-button class="mx-2"
+                                (click)="cancelarEdit()">Cancelar</button>
+                            <button *ngIf="idPersonal" mat-raised-button color="primary" class="mx-2"
+                                [disabled]="formulario.invalid" (click)="editarPersonal()">Editar</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="col-12 px-4 py-2">
+                <hr class="hr-text" data-content="Lista">
+
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead class="table-light">
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Nombre</th>
+                                <th scope="col">Apellido</th>
+                                <th scope="col">Fecha nacimiento</th>
+                                <th scope="col">Edad</th>
+                                <th scope="col">Genero</th>
+                                <th scope="col">Institución</th>
+                                <th scope="col" style="min-width: 180px;">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let personal of listaPersonal; let i = index">
+                                <th scope="row">#{{i + 1}}</th>
+                                <td>{{personal.nombre}}</td>
+                                <td>{{personal.apellido}}</td>
+                                <td>{{personal.fechaNacimiento}}</td>
+                                <td>{{personal.edad}}</td>
+                                <td>{{personal.genero}}</td>
+                                <td>{{obtenerNombreInstitucion(personal.idInstitucion)}}</td>
+                                <td>
+
+                                    <button type="button" (click)="obtEditar(personal.idPersonal)"
+                                        class="btn btn-outline-warning me-2" #tooltip="matTooltip" matTooltip="Editar"
+                                        matTooltipPosition="above">
+                                        <i class="fa-solid fa-pen-to-square"></i>
+                                    </button>
+
+                                    <button type="button" (click)="eliminarPersonal(personal.idPersonal)"
+                                        class="btn btn-outline-danger" #tooltip="matTooltip" matTooltip="Eliminar"
+                                        matTooltipPosition="above">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </mat-card-content>
+
+
+</mat-card>
