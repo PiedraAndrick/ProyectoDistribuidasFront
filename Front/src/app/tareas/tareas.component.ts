@@ -88,26 +88,5 @@ export class TareasComponent implements OnInit {
     })
   }
 
-  eliminarTareas(id:any){
-    this.servicio.deleteTareas(id).subscribe((data:any)=>{
-      this.listarTareas();
-      console.log(data);
-      swal.fire({
-        title: 'Se ha eliminado correctamente',
-        confirmButtonColor: '#222323',
-        confirmButtonText: 'ACEPTAR'
-      })
-    });
-  }
 
-  listarMision(){
-    this.servicio.getMision().subscribe((data:any)=>{
-      this.listaMision = data;
-    });
-  }
-
-  obtenerNombreMision(idMision: string): string {
-    const mision = this.listaMision.find((p:any) => p.idMision === Number(idMision));
-    return mision ? mision.nombre : '';
-  }
 }
