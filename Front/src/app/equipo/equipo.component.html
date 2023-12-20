@@ -1,0 +1,89 @@
+<mat-card>
+    <mat-card-content>
+        <mat-card class="card_title text-center">
+            <mat-card-content>
+                <h2>Equipo</h2>
+            </mat-card-content>
+        </mat-card>
+
+        <div class="row mt-2">
+            <div class="col-12 text-end px-4 mb-3">
+                <hr class="hr-text" data-content="Formulario">
+
+                <form [formGroup]="formulario" class="py-2">
+                    <div class="row">
+                        <div class="col-12 col-md-6 col-lg-6 mb-3 text-start">
+                            <div class="mb-1">
+                                <label for="nombre" class="form-label fw-bold">Nombre</label>
+                                <input type="text" class="form-control form-control-sm" id="nombre" placeholder="Nombre" formControlName="nombre">
+                            </div>
+
+                            <div *ngIf="formulario.controls['nombre'].invalid && formulario.controls['nombre'].touched" class="invalid-feedback">
+                                <div *ngIf="formulario.controls['nombre'].errors?.['required']">El nombre es requerido.</div>
+                                <div *ngIf="formulario.controls['nombre'].errors?.['minlength']">El nombre debe ser mayor de 3 caracteres.</div>
+                                <div *ngIf="formulario.controls['nombre'].errors?.['maxlength']">El nombre debe ser menor de 50 caracteres.</div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-md-6 col-lg-6 mb-3 text-start">
+                            <label for="persona" class="form-label fw-bold">Persona</label>                            
+                            <select formControlName="idPersona" class="form-select form-select-sm"  [(ngModel)]="selectedPersonal">
+                                <option value="-1" disabled selected>Seleccione una persona</option>
+                                <option *ngFor="let personal of listaPersonal" [value]="personal.idPersonal">{{personal.nombre}}</option>
+                            </select>
+
+                            <div *ngIf="formulario.controls['idPersona'].invalid && formulario.controls['idPersona'].touched" class="invalid-feedback">
+                                <div *ngIf="formulario.controls['idPersona'].errors?.['required']">Debe seleccionar una persona.</div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 text-center mt-3">
+                            <button *ngIf="!idEquipo" mat-raised-button class="mx-2"
+                                (click)="resetearEquipo()">Resetear</button>
+                            <button *ngIf="!idEquipo" mat-raised-button color="primary" class="mx-2"
+                                [disabled]="formulario.invalid" (click)="crearEquipo()">Guardar</button>
+                            <button *ngIf="idEquipo" mat-raised-button class="mx-2"
+                                (click)="cancelarEdit()">Cancelar</button>
+                            <button *ngIf="idEquipo" mat-raised-button color="primary" class="mx-2"
+                                [disabled]="formulario.invalid" (click)="editarEquipo()">Editar</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="col-12 px-4 py-2">
+                <hr class="hr-text" data-content="Lista">
+                
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead class="table-light">
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Nombre</th>
+                                <th scope="col">Persona</th>
+                                <th scope="col" style="min-width: 180px;">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let equipo of listaEquipo; let i = index">
+                                <th scope="row">#{{i + 1}}</th>
+                                <td>{{equipo.nombre}}</td>
+                                <td>{{obtenerNombrePersonal(equipo.idPersona)}}</td>
+                                <td>
+    
+                                    <button type="button" (click)="obtEditar(equipo.idEquipo)" class="btn btn-outline-warning me-2" #tooltip="matTooltip" matTooltip="Editar" matTooltipPosition="above">
+                                        <i class="fa-solid fa-pen-to-square"></i>
+                                    </button>
+    
+                                    <button type="button" (click)="eliminarEquipo(equipo.idEquipo)" class="btn btn-outline-danger" #tooltip="matTooltip" matTooltip="Eliminar" matTooltipPosition="above">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </mat-card-content>
+</mat-card>
