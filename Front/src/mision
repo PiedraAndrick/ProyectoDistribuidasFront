@@ -1,0 +1,116 @@
+<mat-card>
+    <mat-card-content>
+        <mat-card class="card_title text-center">
+            <mat-card-content>
+                <h2>Misión</h2>
+            </mat-card-content>
+        </mat-card>
+
+        <div class="row mt-2">
+            <div class="col-12 text-end px-4 mb-3">
+                <hr class="hr-text" data-content="Formulario">
+
+                <form [formGroup]="formulario" class="py-2">
+                    <div class="row">
+                        <div class="col-12 col-md-6 col-lg-3 mb-3 text-start">
+                            <div class="mb-1">
+                                <label for="nombre" class="form-label fw-bold">Nombre</label>
+                                <input type="text" class="form-control form-control-sm" id="nombre" placeholder="Nombre" formControlName="nombre">
+                            </div>
+
+                            <div *ngIf="formulario.controls['nombre'].invalid && formulario.controls['nombre'].touched" class="invalid-feedback">
+                                <div *ngIf="formulario.controls['nombre'].errors?.['required']">El nombre es requerido.</div>
+                                <div *ngIf="formulario.controls['nombre'].errors?.['minlength']">El nombre debe ser mayor de 3 caracteres.</div>
+                                <div *ngIf="formulario.controls['nombre'].errors?.['maxlength']">El nombre debe ser menor de 50 caracteres.</div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-md-6 col-lg-3 mb-3 text-start">
+                            <label for="descripcion" class="form-label fw-bold">Descripción</label>
+                            <textarea class="form-control form-control-sm" id="descripcion" rows="1" placeholder="Descripción" formControlName="descripcion"></textarea>
+
+                            <div *ngIf="formulario.controls['descripcion'].invalid && formulario.controls['descripcion'].touched" class="invalid-feedback">
+                                <div *ngIf="formulario.controls['descripcion'].errors?.['required']">La descripción es requerida.</div>
+                                <div *ngIf="formulario.controls['descripcion'].errors?.['minlength']">La descripción debe ser mayor de 3 caracteres.</div>
+                                <div *ngIf="formulario.controls['descripcion'].errors?.['maxlength']">La descripción debe ser menor de 250 caracteres.</div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-md-6 col-lg-3 mb-3 text-start">
+                            <label for="idEquipo" class="form-label fw-bold">Equipo</label>                            
+                            <select formControlName="idEquipo" class="form-select form-select-sm"  [(ngModel)]="selectedEquipo">
+                                <option value="-1" selected>Seleccione un equipo</option>
+                                <option *ngFor="let equipo of listaEquipo" [value]="equipo.idEquipo">{{equipo.nombre}}</option>
+                            </select>
+
+                            <div *ngIf="formulario.controls['idEquipo'].invalid && formulario.controls['idEquipo'].touched" class="invalid-feedback">
+                                <div *ngIf="formulario.controls['idEquipo'].errors?.['required']">El equipo es requerido.</div>
+                            </div>
+                        </div>                        
+
+                        <div class="col-12 col-md-6 col-lg-3 mb-3 text-start">
+                            <label for="estado" class="form-label fw-bold">Estado</label>
+                            <select class="form-select form-select-sm" aria-label="Default select example" id="estado" formControlName="estado">
+                                <option selected> --- Seleccionar --- </option>
+                                <option value="En proceso">En proceso</option>
+                                <option value="Terminada">Terminada</option>
+                            </select>
+
+                            <div *ngIf="formulario.controls['estado'].invalid && formulario.controls['estado'].touched" class="invalid-feedback">
+                                <div *ngIf="formulario.controls['estado'].errors?.['required']">EL estado es requerido.</div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 text-center mt-3">
+                            <button *ngIf="!idMision" mat-raised-button class="mx-2"
+                                (click)="resetearMision()">Resetear</button>
+                            <button *ngIf="!idMision" mat-raised-button color="primary" class="mx-2"
+                                (click)="crearMision()">Guardar</button>
+                            <button *ngIf="idMision" mat-raised-button class="mx-2"
+                                (click)="cancelarEdit()">Cancelar</button>
+                            <button *ngIf="idMision" mat-raised-button color="primary" class="mx-2"
+                                [disabled]="formulario.invalid" (click)="editarMision()">Editar</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="col-12 px-4 py-2">
+                <hr class="hr-text" data-content="Lista">
+                
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead class="table-light">
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Nombre</th>
+                                <th scope="col">Descripción</th>
+                                <th scope="col">Equipo</th>
+                                <th scope="col">Estado</th>
+                                <th scope="col" style="min-width: 180px;">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let mision of listaMision; let i = index">
+                                <th scope="row">#{{i + 1}}</th>
+                                <td>{{mision.nombre}}</td>
+                                <td>{{mision.descripcion}}</td>
+                                <td>{{obtenerNombreEquipo(mision.idEquipo)}}</td>
+                                <td>{{mision.estado}}</td>
+                                <td>    
+                                    <button type="button" (click)="obtEditar(mision.idMision)" class="btn btn-outline-warning me-2" #tooltip="matTooltip" matTooltip="Editar" matTooltipPosition="above">
+                                        <i class="fa-solid fa-pen-to-square"></i>
+                                    </button>
+    
+                                    <button type="button" (click)="eliminarMision(mision.idMision)" class="btn btn-outline-danger" #tooltip="matTooltip" matTooltip="Eliminar" matTooltipPosition="above">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </mat-card-content>
+</mat-card>
